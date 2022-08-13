@@ -1,13 +1,7 @@
-(function (window, document) {
-if (!window.XMPlayer) {
-  window.XMPlayer = {};
-}
-var player = window.XMPlayer;
+export const XMView = {};
+let player;
 
-if (!window.XMView) {
-  window.XMView = {};
-}
-var view = window.XMView;
+const view  = XMView;
 
 var _pattern_cellwidth = 16 + 4 + 8 + 4 + 8 + 16 + 4;
 var _scope_width = _pattern_cellwidth - 1;
@@ -235,7 +229,8 @@ function redrawScreen() {
   }
 }
 
-function init() {
+function init(_player) {
+  player = _player;
   var title = document.getElementById("title");
   // make title element fit text exactly, then render it
   title.width = getTextSize(player.xm.songname, _bigfontwidths);
@@ -344,5 +339,3 @@ function stop() {
   audio_events = [];
   paused_events = [];
 }
-
-})(window, document);
