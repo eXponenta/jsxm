@@ -1,11 +1,11 @@
-import { XMPlayer } from './lib/xm.js';
+import { XMPlayer } from './lib/xmWorklet.js';
 import { XMView } from './trackview.js';
 
 (function (window, document) {
   const playerInstance = new XMPlayer();
 
-  function loadXMAndInit(xmdata) {
-    if (!playerInstance.load(xmdata)) {
+  async function loadXMAndInit(xmdata) {
+    if (!await playerInstance.load(xmdata)) {
       return;
     }
 
@@ -31,10 +31,10 @@ import { XMView } from './trackview.js';
     var xmReq = new XMLHttpRequest();
     xmReq.open("GET", uri, true);
     xmReq.responseType = "arraybuffer";
-    xmReq.onload = function (xmEvent) {
+    xmReq.onload = async function (xmEvent) {
       var arrayBuffer = xmReq.response;
       if (arrayBuffer) {
-        loadXMAndInit(arrayBuffer);
+        await loadXMAndInit(arrayBuffer);
       } else {
         console.log("unable to load", uri);
       }
@@ -58,9 +58,9 @@ import { XMView } from './trackview.js';
     var files = e.target.files || e.dataTransfer.files;
     if (files.length < 1) return false;
     var reader = new FileReader();
-    reader.onload = function (e) {
+    reader.onload = async function (e) {
       playerInstance.stop();
-      loadXMAndInit(e.target.result);
+      await loadXMAndInit(e.target.result);
     };
     reader.readAsArrayBuffer(files[0]);
     return false;
